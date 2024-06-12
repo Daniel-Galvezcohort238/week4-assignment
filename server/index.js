@@ -1,20 +1,20 @@
-import express from 'express';
-import cors from 'cors';
-import mysql from 'mysql2/promise';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
+const express = require('express');
+const cors = require('cors');
+const mysql = require('mysql2/promise');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 
 // Allows us to access the .env
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT; // default port to listen
+const port = process.env.PORT || 3000; // default port to listen
 
 const corsOptions = {
-  origin: '*', 
-  credentials: true,  
+  origin: '*',
+  credentials: true,
   'access-control-allow-credentials': true,
   optionSuccessStatus: 200,
 };
@@ -137,7 +137,8 @@ app.post('/log-in', async function (req, res) {
   try {
     const { username, password: userEnteredPassword } = req.body;
 
-    const [[user]] = await req.db.query(`SELECT * FROM user WHERE user_name = :username`, { username });
+    const [[user]] = await req.db.query(`SELECT * FROM user WHERE user_name = :username`,
+      { username });
 
     if (!user) res.json('Username not found');
   
